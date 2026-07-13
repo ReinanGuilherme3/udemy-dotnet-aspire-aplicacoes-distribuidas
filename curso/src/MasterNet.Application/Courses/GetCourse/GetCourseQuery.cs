@@ -1,13 +1,9 @@
+using Core.Mappy.Extensions;
+using Core.Mappy.Interfaces;
+using Core.MediatOR.Contracts;
 using MasterNet.Application.Core;
 using MasterNet.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MasterNet.Application.Ratings.GetRatings;
-using MasterNet.Application.Instructors.GetInstructors;
-using MasterNet.Application.Prices.GetPrices;
-using MasterNet.Application.Photos.GetPhoto;
-using Core.MediatOR.Contracts;
-using Core.Mappy.Interfaces;
-using Core.Mappy.Extensions; 
 
 namespace MasterNet.Application.Courses.GetCourse;
 
@@ -50,14 +46,3 @@ public class GetCourseQuery
         }
     }
 }
-
-public record CourseResponse(
-    Guid Id,
-    string Title,
-    string Description,
-    DateTime? PublishedAt,
-    List<InstructorResponse> Instructors,
-    List<RatingResponse> Ratings,
-    List<PriceResponse> Prices,
-    List<PhotoResponse> Photos
-);

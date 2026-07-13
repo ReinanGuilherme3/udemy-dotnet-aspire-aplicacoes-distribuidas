@@ -1,4 +1,5 @@
 using Core.MediatOR.Contracts;
+using MasterNet.Application.Contracts;
 using MasterNet.Application.Core;
 using MasterNet.Application.Ratings.GetRatings;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace MasterNet.WebApi.Controllers;
 public class RatesController : ControllerBase
 {
     private readonly IMediatOR _sender;
+    private readonly IRatingServiceHttpClient _ratingServiceHttpClient;
 
-    public RatesController(IMediatOR sender)
+    public RatesController(IMediatOR sender, IRatingServiceHttpClient ratingServiceHttpClient)
     {
         _sender = sender;
+        _ratingServiceHttpClient = ratingServiceHttpClient;
     }
 
     [AllowAnonymous]
@@ -36,4 +39,21 @@ public class RatesController : ControllerBase
         return results.IsSuccess ? Ok(results.Value) : NotFound();
     }
 
+    [AllowAnonymous]
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> SendRating([FromBody] SendRatingRequest request, CancellationToken cancellationToken
+    )
+    {
+        if (string.IsNullOrWhiteSpace(request.Id) || request.Rating < 1 || request.Rating > 5)
+        {
+            return BadRequest("Rating must be between 1 and 5.");
+        }
+        await _ratingServiceHttpClient.SendRating(request.Id, request.Rating);
+        return Ok();
+    }
+
 }
+
+public record SendRatingRequest(string Id, int Rating);

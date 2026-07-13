@@ -96,11 +96,10 @@ public class GetCoursesQuery
             {
                 var course = pagination.Items[i];
                 var rating = await _ratingServiceHttpClient.GetRating(course.Id.ToString());
+
                 pagination.Items[i] = course with
                 {
-                    Ratings = [
-                        new(null, rating, null, null)
-                    ]
+                    Score = rating,
                 };
             }
 

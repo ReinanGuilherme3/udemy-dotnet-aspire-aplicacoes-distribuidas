@@ -35,7 +35,7 @@ builder.AddServiceDefaults();
 
 builder.Services.AddHttpClient<IRatingServiceHttpClient, RatingServiceHttpClient>(client =>
 {
-    client.BaseAddress = new Uri("https+http://ratingservice");
+    client.BaseAddress = new Uri("https+http://rating-service");
 });
 
 builder.Services.AddHttpContextAccessor();

@@ -6,6 +6,7 @@ public sealed record class CourseResponse
     public Guid Id { get; init; }
     public string Title { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
+    public int Score { get; init; }
     public DateTime? PublishedAt { get; init; }
     public List<InstructorResponse> Instructors { get; init; } = [];
     public List<RatingResponse> Ratings { get; init; } = [];

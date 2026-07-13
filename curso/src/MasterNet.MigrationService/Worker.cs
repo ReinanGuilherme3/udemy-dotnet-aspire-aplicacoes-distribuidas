@@ -33,11 +33,11 @@ public class Worker(
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<MasterNetDbContext>();
 
-            await InitialSchemaSql(configuration, stoppingToken, logger);
+            //await InitialSchemaSql(configuration, stoppingToken, logger);
 
-            //await EnsureDatabaseAsync(context, stoppingToken);
-            //await RunMigrationAsync(context, stoppingToken);
-            //await SeedDataAsync(context, stoppingToken);
+            await EnsureDatabaseAsync(context, stoppingToken);
+            await RunMigrationAsync(context, stoppingToken);
+            await SeedDataAsync(context, stoppingToken);
 
 
         }
