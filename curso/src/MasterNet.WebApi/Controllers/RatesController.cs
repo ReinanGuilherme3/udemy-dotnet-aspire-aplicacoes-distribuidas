@@ -4,6 +4,7 @@ using MasterNet.Application.Core;
 using MasterNet.Application.Ratings.GetRatings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 using System.Net;
 using static MasterNet.Application.Ratings.GetRatings.GetRatingsQuery;
 
@@ -50,7 +51,13 @@ public class RatesController : ControllerBase
         {
             return BadRequest("Rating must be between 1 and 5.");
         }
+
+        var meter = new Meter("MasterNet.WebApi", "1.0");
+        var ratingCounter = meter.CreateCounter<int>("ratings_enviados", description: "Number of ratings sent");
+
         await _ratingServiceHttpClient.SendRating(request.Id, request.Rating);
+
+        ratingCounter.Add(1);
         return Ok();
     }
 
