@@ -5,6 +5,7 @@ using MasterNet.Infrastructure;
 using MasterNet.Infrastructure.Photos;
 using MasterNet.Infrastructure.Reports;
 using MasterNet.Persistence;
+using MasterNet.WebApi;
 using MasterNet.WebApi.Extensions;
 using MasterNet.WebApi.Middleware;
 using Microsoft.AspNetCore.OData;
@@ -30,6 +31,11 @@ builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped(typeof(IReportService<>), typeof(ReportService<>));
 
 builder.AddServiceDefaults();
+
+builder.Services.AddHttpClient<RatingServiceHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("https+http://ratingservice");
+});
 
 builder.Services.AddHttpContextAccessor();
 IEdmModel GetEdmModel()
