@@ -1,4 +1,5 @@
 using MasterNet.Application;
+using MasterNet.Application.Contracts;
 using MasterNet.Application.Interfaces;
 using MasterNet.Domain.Courses;
 using MasterNet.Infrastructure;
@@ -32,7 +33,7 @@ builder.Services.AddScoped(typeof(IReportService<>), typeof(ReportService<>));
 
 builder.AddServiceDefaults();
 
-builder.Services.AddHttpClient<RatingServiceHttpClient>(client =>
+builder.Services.AddHttpClient<IRatingServiceHttpClient, RatingServiceHttpClient>(client =>
 {
     client.BaseAddress = new Uri("https+http://ratingservice");
 });

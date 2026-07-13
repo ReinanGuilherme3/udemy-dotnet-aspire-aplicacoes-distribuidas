@@ -1,6 +1,7 @@
 using Core.Mappy.Extensions;
 using Core.Mappy.Interfaces;
 using Core.MediatOR.Contracts;
+using MasterNet.Application.Contracts;
 using MasterNet.Application.Core;
 using MasterNet.Application.Courses.GetCourse;
 using MasterNet.Domain.Courses;
@@ -23,11 +24,13 @@ public class GetCoursesQuery
     {
         private readonly MasterNetDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IRatingServiceHttpClient _ratingServiceHttpClient;
 
-        public GetCoursesQueryHandler(MasterNetDbContext context, IMapper mapper)
+        public GetCoursesQueryHandler(MasterNetDbContext context, IMapper mapper, IRatingServiceHttpClient ratingServiceHttpClient)
         {
             _context = context;
             _mapper = mapper;
+            _ratingServiceHttpClient = ratingServiceHttpClient;
         }
 
         public async Task<Result<PagedList<CourseResponse>>> Handle(
@@ -88,6 +91,18 @@ public class GetCoursesQuery
                 request.CoursesRequest.PageNumber,
                 request.CoursesRequest.PageSize
             );
+
+            for (int i = 0; i < pagination.Items.Count; i++)
+            {
+                var course = pagination.Items[i];
+                var rating = await _ratingServiceHttpClient.GetRating(course.Id.ToString());
+                pagination.Items[i] = course with
+                {
+                    Ratings = [
+                        new(null, rating, null, null)
+                    ]
+                };
+            }
 
             return Result<PagedList<CourseResponse>>.Success(pagination);
 

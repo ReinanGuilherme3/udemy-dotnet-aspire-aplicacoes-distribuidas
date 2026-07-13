@@ -1,6 +1,8 @@
-﻿namespace MasterNet.WebApi;
+﻿using MasterNet.Application.Contracts;
 
-public class RatingServiceHttpClient(HttpClient httpClient, ILogger<RatingServiceHttpClient> logger)
+namespace MasterNet.WebApi;
+
+public class RatingServiceHttpClient(HttpClient httpClient, ILogger<RatingServiceHttpClient> logger) : IRatingServiceHttpClient
 {
     public Task<int> GetRating(string id) =>
         httpClient.GetFromJsonAsync<int>($"/ratings/{id}");
