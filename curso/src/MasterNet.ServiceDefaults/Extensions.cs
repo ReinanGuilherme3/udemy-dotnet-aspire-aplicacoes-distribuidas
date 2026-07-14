@@ -61,6 +61,7 @@ public static class Extensions
             .WithTracing(tracing =>
             {
                 tracing.AddSource(builder.Environment.ApplicationName)
+                .AddSource("MasterNet.Course")
                     .AddAspNetCoreInstrumentation(tracing =>
                         // Exclude health check requests from tracing
                         tracing.Filter = context =>
@@ -69,7 +70,8 @@ public static class Extensions
                     )
                     // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                     //.AddGrpcClientInstrumentation()
-                    .AddHttpClientInstrumentation();
+                    .AddHttpClientInstrumentation()
+                    .AddSqlClientInstrumentation();
             });
 
         builder.AddOpenTelemetryExporters();

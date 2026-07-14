@@ -7,6 +7,8 @@ using MasterNet.Application.Courses.GetCourse;
 using MasterNet.Domain.Courses;
 using MasterNet.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace MasterNet.Application.Courses.GetCourses;
@@ -25,6 +27,8 @@ public class GetCoursesQuery
         private readonly MasterNetDbContext _context;
         private readonly IMapper _mapper;
         private readonly IRatingServiceHttpClient _ratingServiceHttpClient;
+        private ILogger<GetCoursesQueryHandler> _logger;
+        private static readonly ActivitySource _activitySource = new("MasterNet.Courses");
 
         public GetCoursesQueryHandler(MasterNetDbContext context, IMapper mapper, IRatingServiceHttpClient ratingServiceHttpClient)
         {
@@ -92,16 +96,25 @@ public class GetCoursesQuery
                 request.CoursesRequest.PageSize
             );
 
-            for (int i = 0; i < pagination.Items.Count; i++)
+            using (var activity = _activitySource.StartActivity("Obten las calificaciones desde Rating Service"))
             {
-                var course = pagination.Items[i];
-                var rating = await _ratingServiceHttpClient.GetRating(course.Id.ToString());
-
-                pagination.Items[i] = course with
+                for (int i = 0; i < pagination.Items.Count; i++)
                 {
-                    Score = rating,
-                };
+                    var course = pagination.Items[i];
+                    var rating = await _ratingServiceHttpClient.GetRating(course.Id.ToString());
+
+                    pagination.Items[i] = course with
+                    {
+                        Score = rating,
+                    };
+                }
+
+                activity?.SetTag("TotalCount", pagination.TotalCount);
+                activity?.SetTag("PageSize", pagination.PageSize);
+                activity?.SetTag("CurrentPage", pagination.CurrentPage);
+                activity?.SetTag("TotalPages", pagination.TotalPages);
             }
+
 
             return Result<PagedList<CourseResponse>>.Success(pagination);
 

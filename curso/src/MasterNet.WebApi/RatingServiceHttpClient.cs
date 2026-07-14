@@ -4,8 +4,15 @@ namespace MasterNet.WebApi;
 
 public class RatingServiceHttpClient(HttpClient httpClient, ILogger<RatingServiceHttpClient> logger) : IRatingServiceHttpClient
 {
-    public Task<int> GetRating(string id) =>
-        httpClient.GetFromJsonAsync<int>($"/ratings/{id}");
+    public async Task<int> GetRating(string id)
+    {
+        var response = await httpClient.GetAsync($"/ratings/{id}");
+
+        if (!response.IsSuccessStatusCode)
+            return 0;
+
+        return await response.Content.ReadFromJsonAsync<int>();
+    }
 
     public Task SendRating(string id, int rating)
     {
