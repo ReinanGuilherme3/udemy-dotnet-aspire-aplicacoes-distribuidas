@@ -72,4 +72,5 @@ app.UseCors("corsapp");
 //await app.SeedDataAuthentication();
 
 app.MapControllers();
+app.MapDefaultEndpoints();
 app.Run();

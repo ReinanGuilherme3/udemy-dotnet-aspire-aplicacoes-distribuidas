@@ -22,22 +22,23 @@ var ratingService = builder.AddProject<MasterNet_RatingService>("rating-service"
     .WithReference(cache)
     .WaitFor(cache);
 
+var migration = builder.AddProject<MasterNet_MigrationService>("migration")
+    .WithReference(db)
+    .WaitFor(db)
+    .WithParentRelationship(server);
+
 var api = builder.AddProject<MasterNet_WebApi>("api")
     .WithHttpEndpoint(5001)
     .WithReference(db)
     .WithReference(ratingService)
     .WaitFor(db)
-    .WaitFor(ratingService);
+    .WaitFor(ratingService)
+    .WaitForCompletion(migration);
 
 var client = builder.AddProject<MasterNet_Client>("client")
     .WithReference(api)
     .WaitFor(api)
     .WithExternalHttpEndpoints();
-
-builder.AddProject<MasterNet_MigrationService>("migration")
-    .WithReference(db)
-    .WaitFor(db)
-    .WithParentRelationship(server);
 
 //builder.SubscribeToAppHostEvents();
 builder.SubscribeToResourceEvents(api.Resource);
