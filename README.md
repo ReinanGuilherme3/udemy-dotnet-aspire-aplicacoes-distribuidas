@@ -167,17 +167,9 @@ Além do código-fonte, este repositório também serve como material de consult
 
 # 📜 Certificado
 
-Após a conclusão do curso, o certificado será adicionado abaixo.
-
 <div align="center">
 
 ## 🏆 Certificado de Conclusão
-
-> **(Adicionar a imagem do certificado aqui)**
-
-```text
-/imagens/certificado-udemy-dotnet-aspire.png
-```
 
 <img src="./imagens/certificado.jpg" width="900"/>
 
