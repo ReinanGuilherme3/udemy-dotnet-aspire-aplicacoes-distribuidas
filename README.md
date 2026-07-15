@@ -179,7 +179,7 @@ Após a conclusão do curso, o certificado será adicionado abaixo.
 /imagens/certificado-udemy-dotnet-aspire.png
 ```
 
-<img src="./imagens/certificado-udemy-dotnet-aspire.png" width="900"/>
+<img src="./imagens/certificado.jpg" width="900"/>
 
 </div>
 
