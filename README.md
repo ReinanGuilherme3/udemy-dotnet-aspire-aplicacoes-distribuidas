@@ -177,18 +177,6 @@ Além do código-fonte, este repositório também serve como material de consult
 
 ---
 
-# 📸 Screenshots
-
-Em breve serão adicionadas capturas de tela dos projetos desenvolvidos.
-
----
-
-# 📌 Observação
-
-Este repositório possui finalidade exclusivamente educacional e reúne exemplos, experimentos e implementações produzidas durante o curso.
-
----
-
 # 👨‍💻 Autor
 
 **Reinan Guilherme de Oliveira Neto**
