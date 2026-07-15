@@ -1,3 +1,4 @@
+using MasterNet.AppHost.AppHostEvents;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -37,5 +38,8 @@ builder.AddProject<MasterNet_MigrationService>("migration")
     .WithReference(db)
     .WaitFor(db)
     .WithParentRelationship(server);
+
+//builder.SubscribeToAppHostEvents();
+builder.SubscribeToResourceEvents(api.Resource);
 
 builder.Build().Run();
